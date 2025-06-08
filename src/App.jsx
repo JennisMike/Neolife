@@ -13,10 +13,11 @@ import CheckoutPage from "./pages/CheckoutPage";
 // import SuccessPage from "./pages/SuccessPage";
 // import AboutPage from "./pages/AboutPage";
 // import ContactPage from "./pages/ContactPage";
-// import AdminLoginPage from "./admin/AdminLoginPage";
-// import AdminDashboardPage from "./admin/AdminDashboardPage";
+import AdminLoginPage from "./admin/AdminLoginPage";
+import AdminDashboardPage from "./admin/AdminDashboardPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/products" element={<ProductListPage />} />
         <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
         {/* <Route path="/product/:id" element={<ProductPage />} /> */}
 
         {/* Protected routes */}
@@ -78,6 +80,15 @@ function App() {
           }
         />
         */}
+        <Route path="/admin-login" element={<AdminLoginPage />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardPage />
+            </ProtectedAdminRoute>
+          }
+        />
       </Routes>
       <Footer />
       <FloatingWhatsapp />

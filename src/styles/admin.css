@@ -1,0 +1,11 @@
+/* src/styles/admin.css */
+body {
+  font-family: "Segoe UI", sans-serif;
+}
+
+@media (max-width: 768px) {
+  aside {
+    position: relative !important;
+    min-height: auto !important;
+  }
+}

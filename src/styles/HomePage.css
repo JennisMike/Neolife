@@ -1,0 +1,13 @@
+.leaf-bg {
+  width: 200px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  transform: rotate(20deg);
+}
+
+@media (max-width: 992px) {
+  .leaf-bg {
+    display: none;
+  }
+}

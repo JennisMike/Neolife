@@ -1,0 +1,38 @@
+.product-detail-image {
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.product-short-description {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Buy button styling */
+.btn-buy {
+  color: #28a745;
+  background-color: transparent;
+  border: 2px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.btn-buy:hover,
+.btn-buy:focus {
+  color: white;
+  background-color: #28a745;
+  border-color: #28a745;
+  text-decoration: none;
+}
+
+.product-extra-image {
+  height: 100px;
+  object-fit: cover;
+  border-radius: 0.3rem;
+  transition: transform 0.2s ease;
+}
+
+.product-extra-image:hover {
+  transform: scale(1.05);
+  border-color: #28a745;
+  cursor: pointer;
+}

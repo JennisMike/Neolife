@@ -1,0 +1,64 @@
+/* src/styles/ProductListPage.css */
+
+/* src/styles/ProductListPage.css */
+
+/* Category sidebar */
+.list-group-item {
+  transition: background-color 0.3s ease;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.list-group-item.active {
+  background-color: #198754;
+  color: #fff;
+  font-weight: 600;
+  border-color: #198754;
+}
+
+/* Full-width section (Popular Products) */
+.popular-products {
+  width: 100%;
+}
+
+
+/* ProductCard container adjustments (optional) */
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  transition: box-shadow 0.3s ease;
+  background-color: white;
+}
+
+.product-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Image inside product card */
+.product-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Popular Products header */
+h4 {
+  font-weight: 700;
+  color: #333;
+}
+
+/* Product detail image (used in ProductDetailPage) */
+.product-detail-image {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Responsive fixes (optional) */
+@media (max-width: 576px) {
+  .list-group-item {
+    font-size: 0.9rem;
+  }
+}

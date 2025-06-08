@@ -1,72 +1,56 @@
 // src/pages/ProductListPage.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import "../styles/ProductListPage.css";
-import mockProducts from "../data/mockProducts";
-import "../styles/ProductCard.css";
-
-// const mockProducts = [
-//   {
-//     id: 1,
-//     name: "Pro Vitality, Food supplement",
-//     itemNo: 942,
-//     price: 55.1,
-//     category: "Nutritionals",
-//     image: "/images/pro-vitality.png",
-//   },
-//   {
-//     id: 2,
-//     name: "Carotenoid Complex",
-//     itemNo: 566,
-//     price: 62.4,
-//     category: "Nutritionals",
-//     image: "/images/carotenoid.png",
-//   },
-//   {
-//     id: 3,
-//     name: "Kal-Mag Plus D, Mineral food",
-//     itemNo: 724,
-//     price: 20.5,
-//     category: "Nutritionals",
-//     image: "/images/kal-mag.png",
-//   },
-//   {
-//     id: 4,
-//     name: "Omega-3 Plus",
-//     itemNo: 929,
-//     price: 35.3,
-//     category: "Nutritionals",
-//     image: "/images/omega3.png",
-//   },
-//   {
-//     id: 5,
-//     name: "Herbal Toothpaste",
-//     itemNo: 101,
-//     price: 8.5,
-//     category: "Personal Care",
-//     image: "/images/toothpaste.png",
-//   },
-//   {
-//     id: 6,
-//     name: "LDC Multi-purpose Cleaner",
-//     itemNo: 301,
-//     price: 12.75,
-//     category: "Home Care",
-//     image: "/images/ldc.png",
-//   },
-// ];
-
-const categories = ["All", "Nutritionals", "Personal Care", "Home Care"];
+import { supabase } from "../supabaseClient";
 
 const ProductListPage = () => {
+  const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Fetch products from Supabase on mount
+  useEffect(() => {
+    async function fetchProducts() {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("products")
+        .select("id, name, category, price, main_image")
+        .order("id", { ascending: true });
+
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+      setProducts(data);
+      setLoading(false);
+    }
+
+    fetchProducts();
+  }, []);
+
+  // Compute categories dynamically from fetched products
+  const categories = ["All", ...new Set(products.map((p) => p.category))];
+
+  // Filter products by category
   const filteredProducts =
     selectedCategory === "All"
-      ? mockProducts
-      : mockProducts.filter((product) => product.category === selectedCategory);
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
 
-  const popularProducts = mockProducts.slice(0, 4);
+  // Popular products: first 4 products (adjust logic as needed)
+  const popularProducts = products.slice(0, 4);
+
+  if (loading) return <div className="container my-5">Loading products...</div>;
+
+  if (error)
+    return (
+      <div className="container my-5 text-danger">
+        Error loading products: {error}
+      </div>
+    );
 
   return (
     <div className="container my-5">
@@ -92,11 +76,26 @@ const ProductListPage = () => {
 
         <div className="col-md-9">
           <div className="row">
-            {filteredProducts.map((product) => (
-              <div key={product.id} className="col-sm-6 col-md-4 col-lg-3 mb-4">
-                <ProductCard product={product} />
-              </div>
-            ))}
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="col-sm-6 col-md-4 col-lg-3 mb-4"
+                >
+                  <ProductCard
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      category: product.category,
+                      price: product.price,
+                      image: product.main_image,
+                    }}
+                  />
+                </div>
+              ))
+            ) : (
+              <p>No products found in this category.</p>
+            )}
           </div>
         </div>
       </div>
@@ -106,11 +105,23 @@ const ProductListPage = () => {
       <div className="popular-products">
         <h4 className="mb-4">Popular Products</h4>
         <div className="row">
-          {popularProducts.map((product) => (
-            <div key={product.id} className="col-sm-6 col-md-3 col-lg-3 mb-4">
-              <ProductCard product={product} />
-            </div>
-          ))}
+          {popularProducts.length > 0 ? (
+            popularProducts.map((product) => (
+              <div key={product.id} className="col-sm-6 col-md-3 col-lg-3 mb-4">
+                <ProductCard
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    category: product.category,
+                    price: product.price,
+                    image: product.main_image,
+                  }}
+                />
+              </div>
+            ))
+          ) : (
+            <p>No popular products yet.</p>
+          )}
         </div>
       </div>
     </div>

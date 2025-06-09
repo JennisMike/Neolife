@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { createClient } from "@supabase/supabase-js";
 import "../styles/ProductDetailPage.css";
 import { supabase } from "../supabaseClient";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -45,18 +46,44 @@ const ProductDetailPage = () => {
     fetchProduct();
   }, [id]);
 
-  if (loading) {
+  if (error || (!product && !loading)) {
     return (
       <div className="container my-5">
-        <h3>Loading product details...</h3>
+        <h3>Error loading product: {error || "Product not found"}</h3>
       </div>
     );
   }
 
-  if (error || !product) {
+  if (loading) {
     return (
       <div className="container my-5">
-        <h3>Error loading product: {error || "Product not found"}</h3>
+        <Skeleton height={40} width={120} style={{ marginBottom: 20 }} /> {/* Back button skeleton */}
+
+        <div className="row mb-5">
+          <div className="col-md-5">
+            {/* Skeleton for main image */}
+            <Skeleton height={350} />
+          </div>
+
+          <div className="col-md-7 d-flex flex-column">
+            <Skeleton height={35} width={`80%`} style={{ marginBottom: 12 }} /> {/* Product name */}
+            <Skeleton height={20} width={`40%`} style={{ marginBottom: 10 }} /> {/* Item no */}
+            <Skeleton height={30} width={`30%`} style={{ marginBottom: 20 }} /> {/* Price */}
+            <Skeleton height={20} width={`50%`} style={{ marginBottom: 20 }} /> {/* Category */}
+
+            <Skeleton count={3} style={{ marginBottom: 20 }} /> {/* Short description */}
+
+            <Skeleton height={45} width={150} style={{ marginTop: "auto" }} /> {/* Buy button */}
+          </div>
+        </div>
+
+        <div className="product-extra-section border-top pt-4">
+          <Skeleton height={30} width={150} style={{ marginBottom: 20 }} /> {/* Description title */}
+          <Skeleton count={5} style={{ marginBottom: 30 }} /> {/* Detail description */}
+
+          <Skeleton height={150} width={150} style={{ marginRight: 15 }} /> {/* Extra images skeleton */}
+          <Skeleton height={150} width={150} />
+        </div>
       </div>
     );
   }
@@ -97,7 +124,11 @@ const ProductDetailPage = () => {
 
       <div className="product-extra-section border-top pt-4">
         <h4>Description</h4>
-        <p>{product.detail_description || product.main_description || "No additional description available."}</p>
+        <p>
+          {product.detail_description ||
+            product.main_description ||
+            "No additional description available."}
+        </p>
 
         {/* Additional images below the description */}
         {(product.image_2 || product.image_3) && (

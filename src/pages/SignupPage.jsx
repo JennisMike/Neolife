@@ -28,6 +28,7 @@ function SignupPage() {
       return;
     }
 
+    // Sign up user
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
@@ -35,6 +36,30 @@ function SignupPage() {
 
     if (signUpError) {
       setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    // Insert profile row
+    try {
+      // Wait a bit for user to be created and user id to exist
+      const userId = data.user.id;
+
+      // Insert into profiles table
+      const { error: profileError } = await supabase.from("profiles").insert({
+        id: userId,
+        email: email,
+        created_at: new Date().toISOString(),
+      });
+
+      if (profileError) {
+        // Optional: you can still proceed or show error
+        setError("Failed to create user profile: " + profileError.message);
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      setError("Unexpected error creating profile.");
       setLoading(false);
       return;
     }

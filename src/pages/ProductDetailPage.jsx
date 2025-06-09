@@ -57,31 +57,27 @@ const ProductDetailPage = () => {
   if (loading) {
     return (
       <div className="container my-5">
-        <Skeleton height={40} width={120} style={{ marginBottom: 20 }} /> {/* Back button skeleton */}
+        <Skeleton height={40} width={120} style={{ marginBottom: 20 }} />
 
         <div className="row mb-5">
           <div className="col-md-5">
-            {/* Skeleton for main image */}
             <Skeleton height={350} />
           </div>
 
           <div className="col-md-7 d-flex flex-column">
-            <Skeleton height={35} width={`80%`} style={{ marginBottom: 12 }} /> {/* Product name */}
-            <Skeleton height={20} width={`40%`} style={{ marginBottom: 10 }} /> {/* Item no */}
-            <Skeleton height={30} width={`30%`} style={{ marginBottom: 20 }} /> {/* Price */}
-            <Skeleton height={20} width={`50%`} style={{ marginBottom: 20 }} /> {/* Category */}
-
-            <Skeleton count={3} style={{ marginBottom: 20 }} /> {/* Short description */}
-
-            <Skeleton height={45} width={150} style={{ marginTop: "auto" }} /> {/* Buy button */}
+            <Skeleton height={35} width={`80%`} style={{ marginBottom: 12 }} />
+            <Skeleton height={20} width={`40%`} style={{ marginBottom: 10 }} />
+            <Skeleton height={30} width={`30%`} style={{ marginBottom: 20 }} />
+            <Skeleton height={20} width={`50%`} style={{ marginBottom: 20 }} />
+            <Skeleton count={3} style={{ marginBottom: 20 }} />
+            <Skeleton height={45} width={150} style={{ marginTop: "auto" }} />
           </div>
         </div>
 
         <div className="product-extra-section border-top pt-4">
-          <Skeleton height={30} width={150} style={{ marginBottom: 20 }} /> {/* Description title */}
-          <Skeleton count={5} style={{ marginBottom: 30 }} /> {/* Detail description */}
-
-          <Skeleton height={150} width={150} style={{ marginRight: 15 }} /> {/* Extra images skeleton */}
+          <Skeleton height={30} width={150} style={{ marginBottom: 20 }} />
+          <Skeleton count={5} style={{ marginBottom: 30 }} />
+          <Skeleton height={150} width={150} style={{ marginRight: 15 }} />
           <Skeleton height={150} width={150} />
         </div>
       </div>
@@ -96,7 +92,6 @@ const ProductDetailPage = () => {
 
       <div className="row mb-5">
         <div className="col-md-5">
-          {/* Only main image here */}
           <img
             src={product.main_image}
             alt={product.name}
@@ -116,7 +111,10 @@ const ProductDetailPage = () => {
             {product.main_description || "No description available."}
           </div>
 
-          <button className="btn btn-buy btn-lg mt-auto align-self-start">
+          <button
+            className="btn btn-buy btn-lg mt-auto align-self-start"
+            onClick={() => navigate(`/checkout/${product.id}`)}
+          >
             Buy Now
           </button>
         </div>
@@ -130,7 +128,6 @@ const ProductDetailPage = () => {
             "No additional description available."}
         </p>
 
-        {/* Additional images below the description */}
         {(product.image_2 || product.image_3) && (
           <>
             <h5 className="mt-4">More Images</h5>

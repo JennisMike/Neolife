@@ -10,6 +10,7 @@ import ProductListPage from "./pages/ProductListPage";
 // import ProductPage from "./pages/ProductPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import MyNeoLife from "./pages/MyNeoLife";
 // import SuccessPage from "./pages/SuccessPage";
 // import AboutPage from "./pages/AboutPage";
 // import ContactPage from "./pages/ContactPage";
@@ -39,6 +40,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CheckoutPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/myneolife"
+          element={
+            <ProtectedRoute>
+              <MyNeoLife />
             </ProtectedRoute>
           }
         />

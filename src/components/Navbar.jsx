@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import logo from "/logo.png"; // NeoLife logo
+import logo from "/logo.png";
 import { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient";
 
@@ -7,29 +7,18 @@ function Navbar() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Get current user session
-    const getUser = async () => {
-      const { data } = await supabase.auth.getSession();
+    supabase.auth.getSession().then(({ data }) => {
       setUser(data.session?.user || null);
-    };
+    });
 
-    getUser();
-
-    // Listen for auth state changes (login/logout)
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user || null);
-      }
-    );
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user || null);
+    });
 
     return () => {
-      authListener.subscription.unsubscribe();
+      listener.subscription.unsubscribe();
     };
   }, []);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
@@ -48,46 +37,25 @@ function Navbar() {
 
         <div className="collapse navbar-collapse" id="navContent">
           <ul className="navbar-nav ms-auto align-items-center">
-            <li className="nav-item">
-              <Link className="nav-link" to="/">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/products">
-                Shop
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/about">
-                About
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/contact">
-                Contact
-              </Link>
-            </li>
+            <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/products">Shop</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/about">About</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/contact">Contact</Link></li>
 
             {user && user.email_confirmed_at ? (
               <>
                 <li className="nav-item">
-                  <button
-                    onClick={handleLogout}
-                    className="btn btn-outline-danger ms-3"
-                  >
-                    Logout
-                  </button>
+                  <Link to="/myneolife" className="btn btn-outline-dark rounded-circle ms-3" style={{ width: 45, height: 45 }}>
+                    <span className="d-flex align-items-center justify-content-center" style={{ height: "100%" }}>
+                      <i className="bi bi-person" title="MyNeoLife"></i>
+                    </span>
+                  </Link>
                 </li>
               </>
             ) : (
               <div className="d-flex ms-3">
-                <Link className="btn btn-outline-success me-2" to="/login">
-                  Login
-                </Link>
-                <Link className="btn btn-success" to="/signup">
-                  Sign Up
-                </Link>
+                <Link className="btn btn-outline-success me-2" to="/login">Login</Link>
+                <Link className="btn btn-success" to="/signup">Sign Up</Link>
               </div>
             )}
           </ul>
